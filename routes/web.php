@@ -31,4 +31,6 @@ Route::group(['middleware' => ['auth']], function() {
     
     Route::post('/movimientos/store', 'MovimientoController@store')->name('movimientos.store');
     Route::delete('/movimientos/delete', 'MovimientoController@delete')->name('movimientos.delete');
+
+    Route::get('/ajax/get_departamentos', 'AjaxController@get_departamentos')->name('get_departamentos');
 });

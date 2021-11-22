@@ -1,5 +1,18 @@
 @extends('layouts.app')
 
+@section('custom_css')
+    <style>
+        #tabla_de_departamentos_filter {
+            display: none;
+        }
+
+        /* .dt-buttons {
+            display: none;
+        } */
+
+    </style>
+@stop
+
 @section('content')
    <h1 class="h2 text-center">Listado de Departamentos</h1>
    <div class="row my-3">
@@ -10,7 +23,7 @@
    <div class="row">
       <div class="col-md-12">
          <div class="col-md-12">
-            <table id="departamentos" class="table-hover" style="width:100%">
+            <table id="tabla_de_departamentos" class="table-hover" style="width:100%">
                 <thead>
                     <tr>
                         <th class="text-muted">Numero</th>
@@ -20,32 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ( $departamentos as $dept )
-                    <tr>
-                       <td>
-                          <a href="{{ route('departamentos.show', ['dept_id' => $dept->id]) }}">
-                             {{ $dept->numero }}
-                          </a>
-                       </td>
-                       <td>
-                          <a class="{{ $dept->get_deuda_actual() >= 0 ? "text-success" : "text-danger" }}" href="{{ route('departamentos.show', ['dept_id' => $dept->id]) }}">
-                             {{ number_format( $dept->get_deuda_actual(), 0, ',', '.' ) }}
-                          </a>
-                       </td>
-                       <td>
-                          {{ count($dept->movimientos) }}
-                       </td>
-                       <td>
-                          <button onclick="sweetAlert(`eliminar_departamento_{{ $dept->id }}`, {{ $dept->numero }})" type="button" class="btn btn-sm btn-danger">Eliminar</button>
-                          
-                          <form action="{{ route('departamentos.delete', ['dept_id' => $dept->id]) }}" method="POST">
-                             @csrf
-                             @method('delete')
-                             <input id="eliminar_departamento_{{ $dept->id }}" class="d-none" type="submit" value="Eliminar Departamento">
-                          </form>
-                       </td>
-                    </tr>
-                 @endforeach
+                    {{-- DATATABLE SERVER SIDE PROCESSING WITH YAJRA --}}
                 </tbody>
             </table>
          </div>
@@ -57,13 +45,23 @@
 
 @section('custom_js')
     <script>
-        var TABLE;
+        var TABLA_DEPARTAMENTOS;
 
         $(document).ready(function() {
 
-            // DataTables initialisation
-            TABLE = $('#departamentos').DataTable({
-                pageLength: 10,
+            TABLA_DEPARTAMENTOS = $('#tabla_de_departamentos').DataTable({
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    url: "{{ route('get_departamentos') }}"
+                },
+                columns: [
+                    { data: "id", name: 'id'},
+                    { data: "numero", name: 'numero'},
+                    { data: "cantidad_de_movimientos", name: 'cantidad_de_movimientos'},
+                    { data: 'action', orderable: false, searchable: false}
+                ],
+                pageLength: 30,
                 language: {
                     sProcessing: "Procesando...",
                     sLengthMenu: "Mostrar _MENU_ registros",
@@ -92,13 +90,12 @@
                 dom: 'Bfrtip',
                 buttons: [{
                     extend: 'excelHtml5',
-                    title: "Listado de departamentos - " + new Date().toLocaleString(),
+                    title: "Listado de Departamentos - " + new Date().toLocaleString(),
                     className: "bg-info",
                     exportOptions: {
                         columns: ':not(.no_exportar)'
                     }
                 }],
-
             });
 
         });
