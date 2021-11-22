@@ -63,9 +63,17 @@ class MovimientoController extends Controller
         return redirect()->back()->with('success', "Nuevo movimiento {$movimiento->numero} se agregó correctamente.");
     }
 
-    public function show(Movimiento $movimiento)
+    public function show( Request $request )
     {
-        //
+        Validator::make($request->all(), [
+            'movimiento_id' => 'required|integer|exists_soft:movimientos,id',
+        ])->validate();
+
+        $movimiento = Movimiento::where('id', $request->get('movimiento_id'))->first();
+
+        return view('movimientos.show', [
+            'movimiento' => $movimiento,
+        ]);
     }
 
     public function edit(Movimiento $movimiento)
@@ -93,5 +101,24 @@ class MovimientoController extends Controller
     public function destroy(Movimiento $movimiento)
     {
         //
+    }
+
+    public function cambiar_status( Request $request )
+    {
+        Validator::make($request->all(), [
+            'movimiento_id' => 'required|integer|exists_soft:movimientos,id',
+        ])->validate();
+
+        $movimiento = Movimiento::where('id', $request->get('movimiento_id'))->first();
+        if ( $movimiento->status == 1 ) {
+            $movimiento->status = 2; // quitar confirmación
+            $movimiento->update();
+            $message = "El movimiento con id. ".$request->get('movimiento_id')." se ha desconfirmado.";
+        } else {
+            $movimiento->status = 1; // confirmar
+            $movimiento->update();
+            $message = "El movimiento con id. ".$request->get('movimiento_id')." se ha CONFIRMADO correctamente.";
+        }
+        return redirect()->back()->with('success', $message);
     }
 }

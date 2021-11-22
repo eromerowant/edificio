@@ -89,11 +89,16 @@ class AjaxController extends Controller
                         ->addColumn('fecha_de_registro', function ($movimiento) {
                             return $movimiento->created_at ? Carbon::parse($movimiento->created_at)->format('d/m/Y') : "-";
                         })
-                        ->addColumn('action', function ($departamento) {
-                            return $departamento->id;
+                        ->addColumn('action', function ($movimiento) {
+                            $obj['id'] = $movimiento->id;
+                            $obj['show'] = route('movimientos.show', ['movimiento_id' => $movimiento->id]);
+                            return $obj;
                         })
                         ->orderColumn('fecha_de_registro', function ($query, $order) {
                             $query->orderBy( 'created_at', $order );
+                        })
+                        ->orderColumn('codigo', function ($query, $order) {
+                            $query->orderBy( 'codigo_identificador', $order );
                         })
                         ->setRowClass('font-weight-bold')
                         ->toJson();

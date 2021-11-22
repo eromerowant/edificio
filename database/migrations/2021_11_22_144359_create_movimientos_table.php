@@ -12,10 +12,10 @@ class CreateMovimientosTable extends Migration
             $table->bigIncrements('id');
 
             $table->string('codigo_identificador')->nullable();
-            $table->float('monto', 9, 2);
             $table->tinyInteger('tipo')->comment('1: deuda. 2: pago');
-            $table->string('status')->comment('1: confirmado. 2: por confirmar')->default(2);
+            $table->float('monto', 9, 2);
             $table->dateTime('fecha_de_confirmacion')->nullable();
+            $table->string('status')->comment('1: confirmado. 2: por confirmar')->default(2);
 
 
             $table->unsignedBigInteger('departamento_id')->nullable();

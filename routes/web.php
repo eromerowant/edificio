@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth']], function() {
     
     Route::post('/movimientos/store', 'MovimientoController@store')->name('movimientos.store');
     Route::delete('/movimientos/delete', 'MovimientoController@delete')->name('movimientos.delete');
+    Route::get('/movimientos/show', 'MovimientoController@show')->name('movimientos.show');
+    Route::post('/movimientos/cambiar_status', 'MovimientoController@cambiar_status')->name('movimientos.cambiar_status');
 
     Route::get('/ajax/get_departamentos', 'AjaxController@get_departamentos')->name('get_departamentos');
     Route::get('/ajax/get_movimientos', 'AjaxController@get_movimientos')->name('get_movimientos');

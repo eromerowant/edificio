@@ -186,6 +186,8 @@
         </div>
     </div>
 
+    
+
 @endsection
 
 @section('custom_js')
@@ -257,7 +259,8 @@
                         orderable: false,
                         searchable: false,
                         render: function (data, type, row){
-                            return `<button onclick="sweetAlertEliminarMovimiento('eliminar_movimiento_${data}', ${data})" type="button" class="btn btn-sm btn-danger">Eliminar</button><form action="${RUTA_PARA_ELIMINAR_MOVIMIENTO}" method="POST"> @csrf @method('delete')<input type="hidden" name="movimiento_id" value="${data}"><input id="eliminar_movimiento_${data}" class="d-none" type="submit" value="Eliminar Movimiento"></form>`;
+                            console.log(data);
+                            return `<a href="${data.show}" class="btn btn-sm btn-info">Ver detalle</a> <button onclick="sweetAlertEliminarMovimiento('eliminar_movimiento_${data.id}', ${data.id})" type="button" class="btn btn-sm btn-danger">Eliminar</button><form action="${RUTA_PARA_ELIMINAR_MOVIMIENTO}" method="POST"> @csrf @method('delete')<input type="hidden" name="movimiento_id" value="${data.id}"><input id="eliminar_movimiento_${data.id}" class="d-none" type="submit" value="Eliminar Movimiento"></form>`;
                         },
                     }
                 ],
