@@ -38,10 +38,11 @@ class DepartamentoController extends Controller
     public function show(Request $request)
     {
         Validator::make($request->all(), [
-            'id' => 'required|integer|exists:departamentos,id',
+            'dept_id' => 'required|exists:departamentos,id',
         ])->validate(); // Este metodo validate() hace la redirección junto con los mensajes de error.
 
-        $departamento = Departamento::where('id', $request->get('id'))->first();
+        $relations = ['movimientos'];
+        $departamento = Departamento::where('id', $request->get('dept_id'))->with($relations)->first();
         return view('departamentos.show', ['departamento' => $departamento]);
     }
 
