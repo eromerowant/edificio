@@ -19,4 +19,19 @@ class Departamento extends Model
     {
         return $this->hasMany('App\Movimiento', 'departamento_id');
     }
+
+    public function get_deuda_actual()
+    {
+        if ( count($this->movimientos) > 0 ) {
+            $deuda_actual = 0;
+            foreach ($this->movimientos as $movimiento) {
+                if ( $movimiento->tipo === 1 ) { // deuda
+                    $deuda_actual -= $movimiento->monto;
+                } elseif ( $movimiento->tipo === 2 ) {
+                    $deuda_actual += $movimiento->monto;
+                }
+            }
+            return $deuda_actual;
+        }    
+    }
 }
