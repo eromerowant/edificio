@@ -39,7 +39,8 @@
                         <td>{{ $movimiento->fecha_de_confirmacion ? $movimiento->fecha_de_confirmacion->format('d-m-Y') : "-" }}</td>
                         <td>{{ $movimiento->created_at->format('d-m-Y') }}</td>
                         <td>
-                           <button type="button" class="btn btn-sm btn-info">Detalle</button>
+                           <button type="button" class="btn btn-sm btn-info">Botón</button>
+                           
                            <button onclick="sweetAlert(`eliminar_movimiento_{{ $movimiento->id }}`, {{ $movimiento->id }})" type="button" class="btn btn-sm btn-danger">Eliminar</button>
 
                            <form action="{{ route('movimientos.delete', ['movimiento_id' => $movimiento->id]) }}" method="POST">
