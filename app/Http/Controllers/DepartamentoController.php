@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Departamento;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Validator;
+
 class DepartamentoController extends Controller
 {
     public function index()
@@ -20,34 +22,29 @@ class DepartamentoController extends Controller
         return view('departamentos.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'numero' => 'required|integer|unique:departamentos,numero',
+        ])->validate(); // Este metodo validate() hace la redirección junto con los mensajes de error.
+
+        $departamento = new Departamento();
+        $departamento->numero = $request->get('numero');
+        $departamento->save();
+
+        return redirect()->back()->with('success', "Nuevo departamento {$departamento->numero} se agregó correctamente.");
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Departamento  $departamento
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Departamento $departamento)
+    public function show(Request $request)
     {
-        //
+        Validator::make($request->all(), [
+            'id' => 'required|integer|exists:departamentos,id',
+        ])->validate(); // Este metodo validate() hace la redirección junto con los mensajes de error.
+
+        $departamento = Departamento::where('id', $request->get('id'))->first();
+        return view('departamentos.show', ['departamento' => $departamento]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Departamento  $departamento
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Departamento $departamento)
     {
         //
