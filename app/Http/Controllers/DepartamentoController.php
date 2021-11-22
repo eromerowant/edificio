@@ -63,6 +63,19 @@ class DepartamentoController extends Controller
         //
     }
 
+    public function delete( Request $request )
+    {
+        Validator::make($request->all(), [
+            'dept_id' => 'required|exists:departamentos,id',
+        ])->validate(); // Este metodo validate() hace la redirección junto con los mensajes de error.
+
+        $departamento = Departamento::where('id', $request->get('dept_id'))->first();
+        $numero = $departamento->numero;
+        $departamento->delete();
+
+        return redirect()->route('departamentos.index')->with('success', "El departamento numero ".$numero." ha sido borrado correctamente.");
+    }
+
     /**
      * Remove the specified resource from storage.
      *

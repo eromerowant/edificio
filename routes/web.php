@@ -27,5 +27,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/departamentos/create', 'DepartamentoController@create')->name('departamentos.create');
     Route::post('/departamentos/store', 'DepartamentoController@store')->name('departamentos.store');
     Route::get('/departamentos/show', 'DepartamentoController@show')->name('departamentos.show');
+    Route::delete('/departamentos/delete', 'DepartamentoController@delete')->name('departamentos.delete');
 
 });

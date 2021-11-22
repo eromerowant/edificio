@@ -18,6 +18,13 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    {{-- SWEET-ALERTS --}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @stack('custom_css')
+    @yield('custom_css')
+
 </head>
 <body>
     <div id="app">
@@ -116,5 +123,7 @@
 
         </main>
     </div>
+    @stack('custom_js')
+    @yield('custom_js')
 </body>
 </html>

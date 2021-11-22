@@ -2,12 +2,14 @@
 
 @section('content')
    <div class="container-fluid">
-      <div class="row">
+      <div class="row my-3">
          <h1 class="h2">Crear Nuevo Departamento</h1>
       </div>
 
       <div class="row">
-         @include('messages-includes.includes')
+         <div class="col-md-12">
+            @include('messages-includes.includes')
+         </div>
       </div>
       
       <div class="row">

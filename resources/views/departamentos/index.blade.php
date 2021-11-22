@@ -2,6 +2,11 @@
 
 @section('content')
    <h1 class="h2 text-center">Listado de departamentos</h1>
+   <div class="row my-3">
+      <div class="col-md-12">
+         @include('messages-includes.includes')
+      </div>
+   </div>
    <div class="row">
       <div class="col-md-12">
          <div class="col-md-12">
@@ -25,7 +30,12 @@
                            {{ number_format( $dept->get_deuda_actual(), 0, ',', '.' ) }}
                         </td>
                         <td>
-                           <button type="button" class="btn btn-sm btn-info">Botón</button>
+                           <button onclick="sweetAlert(`eliminar_departamento_{{ $dept->id }}`, {{ $dept->numero }})" type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                           <form action="{{ route('departamentos.delete', ['dept_id' => $dept->id]) }}" method="POST">
+                              @csrf
+                              @method('delete')
+                              <input id="eliminar_departamento_{{ $dept->id }}" class="d-none" type="submit" value="Eliminar Departamento">
+                           </form>
                         </td>
                      </tr>
                   @endforeach
@@ -34,4 +44,22 @@
          </div>
       </div>
    </div>
+@endsection
+
+@section('custom_js')
+    <script>
+        function sweetAlert(div, numero) {
+            Swal.fire({
+                icon: "warning",
+                title: `¿Deseas ELIMINAR el departamento N° ${numero}?`,
+                confirmButtonText: `Eliminar`,
+                confirmButtonColor: '#d9534f',
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    document.getElementById(div).click();
+                }
+            })
+        }
+    </script>
 @endsection
