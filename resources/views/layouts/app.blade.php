@@ -22,7 +22,7 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
@@ -73,7 +73,47 @@
         </nav>
 
         <main class="py-4">
-            @yield('content')
+
+            @guest
+                @yield('content')
+            @else
+                <div class="container-fluid">
+                    <div class="row">
+
+                        {{-- SIDEBAR --}}
+                        <div class="col-md-2">
+                            <ul class="list-group">
+                                <a href="{{ route('departamentos.index') }}">
+                                    <li class="list-group-item {{ request()->routeIs('departamentos.index') ? "active" : "" }}">
+                                        Listado de Departamentos
+                                    </li>
+                                </a>
+                                <a href="{{ route('departamentos.create') }}">
+                                    <li class="list-group-item {{ request()->routeIs('departamentos.create') ? "active" : "" }}">
+                                        Nuevo Departamento
+                                    </li>
+                                </a>
+                                <li class="list-group-item">xxx</li>
+                                <li class="list-group-item">xxx</li>
+                                <li class="list-group-item">xxx</li>
+                            </ul>
+                        </div>
+
+                        {{-- MAIN --}}
+                        <div class="col-md-10">
+                            <div class="container-fluid">
+                                <div class="card">
+                                    <div class="card-body">
+                                        @yield('content')
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            @endguest
+
         </main>
     </div>
 </body>

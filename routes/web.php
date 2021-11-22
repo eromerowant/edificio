@@ -20,3 +20,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware' => ['auth']], function() {
+    
+    Route::get('/departamentos/index', 'DepartamentoController@index')->name('departamentos.index');
+    Route::get('/departamentos/create', 'DepartamentoController@create')->name('departamentos.create');
+
+});

@@ -2,10 +2,10 @@
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class DepartamentoSeeder extends Seeder
 {
     public function run()
     {
-        $this->call(UserSeeder::class);
+        //
     }
 }
