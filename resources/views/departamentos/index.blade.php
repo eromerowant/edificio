@@ -7,40 +7,41 @@
         }
 
         /* .dt-buttons {
-            display: none;
-        } */
+                display: none;
+            } */
 
     </style>
 @stop
 
 @section('content')
-   <h1 class="h2 text-center">Listado de Departamentos</h1>
-   <div class="row my-3">
-      <div class="col-md-12">
-         @include('messages-includes.includes')
-      </div>
-   </div>
-   <div class="row">
-      <div class="col-md-12">
-         <div class="col-md-12">
-            <table id="tabla_de_departamentos" class="table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th class="text-muted">Numero</th>
-                        <th class="text-muted">Deuda Actual</th>
-                        <th class="text-muted">Cantidad de Movimientos</th>
-                        <th class="no_exportar">&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{-- DATATABLE SERVER SIDE PROCESSING WITH YAJRA --}}
-                </tbody>
-            </table>
-         </div>
-      </div>
-   </div>
+    <h1 class="h2 text-center">Listado de Departamentos</h1>
+    <div class="row my-3">
+        <div class="col-md-12">
+            @include('messages-includes.includes')
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12">
+                <table id="tabla_de_departamentos" class="table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-muted">ID</th>
+                            <th class="text-muted">Dept</th>
+                            <th class="text-muted">Deuda Actual</th>
+                            <th class="text-muted">Cantidad de Movimientos</th>
+                            <th class="no_exportar">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{-- DATATABLE SERVER SIDE PROCESSING WITH YAJRA --}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-  
+
 @endsection
 
 @section('custom_js')
@@ -55,11 +56,34 @@
                 ajax: {
                     url: "{{ route('get_departamentos') }}"
                 },
-                columns: [
-                    { data: "id", name: 'id'},
-                    { data: "numero", name: 'numero'},
-                    { data: "cantidad_de_movimientos", name: 'cantidad_de_movimientos'},
-                    { data: 'action', orderable: false, searchable: false}
+                columns: [{
+                        data: "id",
+                        name: 'id'
+                    },
+                    {
+                        data: "numero",
+                        name: 'numero'
+                    },
+                    {
+                        data: "deuda_actual",
+                        name: 'deuda_actual',
+                        render: function (data, type, row){
+                            if ( data >= "0" ) {
+                                return `<span class="text-success">${data}</span>`;
+                            } else {
+                                return `<span class="text-danger">${data}</span>`;
+                            }
+                        },
+                    },
+                    {
+                        data: "cantidad_de_movimientos",
+                        name: 'cantidad_de_movimientos'
+                    },
+                    {
+                        data: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
                 pageLength: 30,
                 language: {
@@ -99,20 +123,5 @@
             });
 
         });
-
-
-        function sweetAlert(div, numero) {
-            Swal.fire({
-                icon: "warning",
-                title: `¿Deseas ELIMINAR el departamento N° ${numero}?`,
-                confirmButtonText: `Eliminar`,
-                confirmButtonColor: '#d9534f',
-            }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    document.getElementById(div).click();
-                }
-            })
-        }
     </script>
 @endsection

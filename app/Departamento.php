@@ -33,7 +33,9 @@ class Departamento extends Model
                     }
                 }
             }
-            return $deuda_actual;
+            return number_format( $deuda_actual, 0, ',', '.' );    
+        } else {
+            return 0;
         }    
     }
 }
