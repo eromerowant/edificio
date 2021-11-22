@@ -28,5 +28,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/departamentos/store', 'DepartamentoController@store')->name('departamentos.store');
     Route::get('/departamentos/show', 'DepartamentoController@show')->name('departamentos.show');
     Route::delete('/departamentos/delete', 'DepartamentoController@delete')->name('departamentos.delete');
-
+    
+    Route::post('/movimientos/store', 'MovimientoController@store')->name('movimientos.store');
+    Route::delete('/movimientos/delete', 'MovimientoController@delete')->name('movimientos.delete');
 });

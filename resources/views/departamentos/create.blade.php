@@ -18,7 +18,7 @@
             @csrf
 
             <div class="input-group mb-3">
-               <input type="number" min="1" step="1" name="numero" class="form-control">
+               <input type="number" min="1" step="1" name="numero" class="form-control" placeholder="Ejemplo: 22">
              </div>
 
              <div class="input-group mb-3">

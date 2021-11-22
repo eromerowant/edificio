@@ -37,6 +37,7 @@
                         </td>
                         <td>
                            <button onclick="sweetAlert(`eliminar_departamento_{{ $dept->id }}`, {{ $dept->numero }})" type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                           
                            <form action="{{ route('departamentos.delete', ['dept_id' => $dept->id]) }}" method="POST">
                               @csrf
                               @method('delete')
