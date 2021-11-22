@@ -1,5 +1,18 @@
 @extends('layouts.app')
 
+@section('custom_css')
+    <style>
+        #tabla_de_movimientos_filter {
+            display: none;
+        }
+
+        .dt-buttons {
+            display: none;
+        }
+
+    </style>
+@stop
+
 @section('content')
     <h1 class="h2 text-center">Departamento N° <b>{{ $departamento->numero }}</b></h1>
     <p class="h4 text-center {{ $departamento->get_deuda_actual() >= '0' ? 'text-success' : 'text-danger' }}">Deuda Actual: {{ $departamento->get_deuda_actual() }}</p>
@@ -14,23 +27,79 @@
                 <h1 class="h3 text-center"><b>Movimientos</b></h1>
             </div>
             <div class="col-md-12">
-                <table id="tabla_de_movimientos" class="table-hover" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th class="text-muted">ID</th>
-                            <th class="text-muted">Código</th>
-                            <th class="text-muted">Monto</th>
-                            <th class="text-muted">Tipo</th>
-                            <th class="text-muted">Status</th>
-                            <th class="text-muted">Fecha de Confirmación</th>
-                            <th class="text-muted">Fecha de Registro</th>
-                            <th class="no_exportar">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{-- DATATABLE SERVER SIDE PROCESSING WITH YAJRA --}}
-                    </tbody>
-                </table>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="h5 text-center">Busqueda Avanzada</h3>
+                        <table style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th class="text-muted">ID</th>
+                                    <th class="text-muted">Código</th>
+                                    <th class="text-muted">Monto</th>
+                                    <th class="text-muted">Tipo</th>
+                                    <th class="text-muted">Status</th>
+                                    <th class="text-muted">Fecha de Registro DESDE</th>
+                                    <th class="text-muted">Fecha de Registro HASTA</th>
+                                    <th class="no_exportar">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="px-2"><input id="input__id" class="form-control" type="number"></td>
+
+                                    <td class="px-2"><input id="input__codigo" class="form-control" type="text"></td>
+
+                                    <td class="px-2"><input id="input__monto" class="form-control" type="number"></td>
+
+                                    <td class="px-2">
+                                        <select class="form-control" id="input__tipo">
+                                            <option value="">-- Todas --</option>
+                                            <option value="1">Deuda</option>
+                                            <option value="2">Pago</option>
+                                        </select>
+                                    </td>
+
+                                    <td class="px-2">
+                                        <select class="form-control" id="input__status">
+                                            <option value="">-- Todos --</option>
+                                            <option value="1">Confirmado</option>
+                                            <option value="2">Por Confirmar</option>
+                                        </select>
+                                    </td>
+
+                                    <td class="px-2"><input id="input__fecha_de_registro_desde" class="form-control" type="date"></td>
+
+                                    <td class="px-2"><input id="input__fecha_de_registro_hasta" class="form-control" type="date"></td>
+
+                                    <td class="px-2">
+                                        <button onclick="ir_a_buscar()" type="button" class="btn btn-sm btn-info">Buscar</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="card-body">
+                        <table id="tabla_de_movimientos" class="table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th class="text-muted">ID</th>
+                                    <th class="text-muted">Código</th>
+                                    <th class="text-muted">Monto</th>
+                                    <th class="text-muted">Tipo</th>
+                                    <th class="text-muted">Status</th>
+                                    <th class="text-muted">Fecha de Confirmación</th>
+                                    <th class="text-muted">Fecha de Registro</th>
+                                    <th class="no_exportar">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{-- DATATABLE SERVER SIDE PROCESSING WITH YAJRA --}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     @else
@@ -130,7 +199,16 @@
                 serverSide: true,
                 processing: true,
                 ajax: {
-                    url: "{{ route('get_movimientos', ['departamento_id' => $departamento->id]) }}"
+                    url: "{{ route('get_movimientos', ['departamento_id' => $departamento->id]) }}",
+                    data: function ( d ) {
+                        d.search_by_id                      = $('#input__id').val();
+                        d.search_by_codigo                  = $('#input__codigo').val();
+                        d.search_by_monto                   = $('#input__monto').val();
+                        d.search_by_tipo                    = $('#input__tipo').val();
+                        d.search_by_status                  = $('#input__status').val();
+                        d.search_by_fecha_de_registro_desde = $('#input__fecha_de_registro_desde').val();
+                        d.search_by_fecha_de_registro_hasta = $('#input__fecha_de_registro_hasta').val();
+                    }
                 },
                 columns: [{
                         data: "id",
@@ -220,8 +298,13 @@
                 }],
             });
 
+            
+
         });
 
+        function ir_a_buscar(){
+            TABLA_MOVIMIENTOS.draw();
+        }
 
         function sweetAlertEliminarMovimiento(div, numero) {
             Swal.fire({

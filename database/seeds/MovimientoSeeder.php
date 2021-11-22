@@ -8,6 +8,6 @@ class MovimientoSeeder extends Seeder
 {
     public function run()
     {
-        factory(Movimiento::class, 40)->create();
+        factory(Movimiento::class, 80)->create();
     }
 }

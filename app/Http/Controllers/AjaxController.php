@@ -38,7 +38,36 @@ class AjaxController extends Controller
         $relaciones = ['departamento'];
         $movimientos = Movimiento::where('departamento_id', $request->get('departamento_id'))->select($columnas)->with($relaciones);
 
+        $starts = $request->get('search_by_fecha_de_registro_desde') ? Carbon::parse( $request->get('search_by_fecha_de_registro_desde') ) : Carbon::now('America/Santiago')->setTimeZone('America/Santiago')->subYears(100);
+        $ends = $request->get('search_by_fecha_de_registro_hasta') ? Carbon::parse( $request->get('search_by_fecha_de_registro_hasta') ) : Carbon::now('America/Santiago')->setTimeZone('America/Santiago')->addYears(100);
+
         return DataTables::eloquent( $movimientos )
+                            ->filter(function ($query) use ($request, $starts, $ends) {
+
+                                if ( $request->get('search_by_id') ) {
+                                    $query->where('id', 'like', "%".$request->get('search_by_id')."%");
+                                }
+
+                                if ( $request->get('search_by_codigo') ) {
+                                    $query->where('codigo_identificador', 'like', "%".$request->get('search_by_codigo')."%");
+                                }
+
+                                if ( $request->get('search_by_monto') ) {
+                                    $query->where('monto', 'like', "%".$request->get('search_by_monto')."%");
+                                }
+                                if ( $request->get('search_by_tipo') ) {
+                                    $query->where('tipo', 'like', "%".$request->get('search_by_tipo')."%");
+                                }
+                                if ( $request->get('search_by_status') ) {
+                                    $query->where('status', 'like', "%".$request->get('search_by_status')."%");
+                                }
+                                if ( $request->get('search_by_status') ) {
+                                    $query->where('status', 'like', "%".$request->get('search_by_status')."%");
+                                }
+
+                                $query->whereBetween('created_at', [$starts, $ends]);
+                                
+                            })
                         ->addColumn('codigo', function ($movimiento) {
                             return $movimiento->codigo_identificador;
                         })
@@ -62,6 +91,9 @@ class AjaxController extends Controller
                         })
                         ->addColumn('action', function ($departamento) {
                             return $departamento->id;
+                        })
+                        ->orderColumn('fecha_de_registro', function ($query, $order) {
+                            $query->orderBy( 'created_at', $order );
                         })
                         ->setRowClass('font-weight-bold')
                         ->toJson();
