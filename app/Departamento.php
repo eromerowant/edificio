@@ -25,10 +25,12 @@ class Departamento extends Model
         if ( count($this->movimientos) > 0 ) {
             $deuda_actual = 0;
             foreach ($this->movimientos as $movimiento) {
-                if ( $movimiento->tipo === 1 ) { // deuda
-                    $deuda_actual -= $movimiento->monto;
-                } elseif ( $movimiento->tipo === 2 ) {
-                    $deuda_actual += $movimiento->monto;
+                if ( $movimiento->status == 1 ) { // movimiento confirmado
+                    if ( $movimiento->tipo == 1 ) { // deuda
+                        $deuda_actual -= $movimiento->monto;
+                    } elseif ( $movimiento->tipo == 2 ) { // Pago
+                        $deuda_actual += $movimiento->monto;
+                    }
                 }
             }
             return $deuda_actual;

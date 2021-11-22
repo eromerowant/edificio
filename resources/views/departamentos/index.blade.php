@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-   <h1 class="h2 text-center">Listado de departamentos</h1>
+   <h1 class="h2 text-center">Listado de Departamentos</h1>
    <div class="row my-3">
       <div class="col-md-12">
          @include('messages-includes.includes')
@@ -15,6 +15,7 @@
                   <tr>
                      <th>Número</th>
                      <th>Deuda Actual</th>
+                     <th>Cantidad de Movimientos</th>
                      <th>Acciones</th>
                   </tr>
                </thead>
@@ -26,8 +27,13 @@
                               {{ $dept->numero }}
                            </a>
                         </td>
-                        <td class="border {{ $dept->get_deuda_actual() >= 0 ? "bg-success" : "bg-danger" }}">
-                           {{ number_format( $dept->get_deuda_actual(), 0, ',', '.' ) }}
+                        <td>
+                           <a class="{{ $dept->get_deuda_actual() >= 0 ? "text-success" : "text-danger" }}" href="{{ route('departamentos.show', ['dept_id' => $dept->id]) }}">
+                              {{ number_format( $dept->get_deuda_actual(), 0, ',', '.' ) }}
+                           </a>
+                        </td>
+                        <td>
+                           {{ count($dept->movimientos) }}
                         </td>
                         <td>
                            <button onclick="sweetAlert(`eliminar_departamento_{{ $dept->id }}`, {{ $dept->numero }})" type="button" class="btn btn-sm btn-danger">Eliminar</button>

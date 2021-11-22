@@ -25,10 +25,10 @@
                      <tr>
                         <td>{{ $movimiento->codigo_identificador }}</td>
                         <td>{{ number_format( $movimiento->monto, 0, ',', '.' ) }}</td>
-                        <td class="{{ $movimiento->tipo === 1 ? "bg-danger" : "bg-success" }}">
-                           {{ $movimiento->tipo === 1 ? "Deuda" : "Pago" }}
+                        <td class="{{ $movimiento->tipo === 1 ? "text-danger" : "text-success" }}">
+                           {{ $movimiento->tipo == 1 ? "Deuda" : "Pago" }}
                         </td>
-                        <td>{{ $movimiento->status === 1 ? "Confirmado" : "Por Confirmar" }}</td>
+                        <td>{{ $movimiento->status == 1 ? "Confirmado" : "Por Confirmar" }}</td>
                         <td>{{ $movimiento->fecha_de_confirmacion->format('d-m-Y H:i:s') }}</td>
                         <td>{{ $movimiento->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
