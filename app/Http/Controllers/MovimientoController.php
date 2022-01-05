@@ -6,6 +6,8 @@ use App\Movimiento;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\MovimientoImport;
 
 class MovimientoController extends Controller
 {
@@ -120,5 +122,17 @@ class MovimientoController extends Controller
             $message = "El movimiento con id. ".$request->get('movimiento_id')." se ha CONFIRMADO correctamente.";
         }
         return redirect()->back()->with('success', $message);
+    }
+
+    public function escoger_excel()
+    {
+        return view('movimientos.escoger_excel');
+    }
+
+    public function subir_excel_con_gastos_comunes( Request $request )
+    {
+        Excel::import( new MovimientoImport(), $request->file('file') );
+        
+        return redirect('/')->with('success', 'All good!');
     }
 }

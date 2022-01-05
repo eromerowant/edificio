@@ -103,7 +103,11 @@
                                         Nuevo Departamento
                                     </li>
                                 </a>
-                                <li class="list-group-item">xxx</li>
+                                <a href="{{ route('movimientos.escoger_excel') }}">
+                                    <li class="list-group-item {{ request()->routeIs('movimientos.escoger_excel') ? "active" : "" }}">
+                                        Subir Excel de Gastos Comunes
+                                    </li>
+                                </a>
                                 <li class="list-group-item">xxx</li>
                                 <li class="list-group-item">xxx</li>
                             </ul>
